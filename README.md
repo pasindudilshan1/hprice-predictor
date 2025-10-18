@@ -125,16 +125,59 @@ Write a `docker-compose.yml` that:
 
 ---
 
+### Step 3: Run All Services with Docker Compose
+
+**Important**: Before running docker compose, you must first generate the model artifacts by running the training pipeline:
+
+```bash
+./run_pipeline.sh
+```
+
+This will create the required model files in `models/trained/` directory.
+
+Once you have the model artifacts, you can start all services with a single command:
+
+```bash
+docker compose up --build
+```
+
+This will:
+* Build the FastAPI and Streamlit images
+* Pull the MLflow image
+* Start all three services in the correct order (mlflow → fastapi → streamlit)
+* Create a shared network for inter-service communication
+
+To run services in detached mode (background):
+
+```bash
+docker compose up --build -d
+```
+
+To stop all services:
+
+```bash
+docker compose down
+```
+
+To view logs:
+
+```bash
+docker compose logs -f
+```
+
+---
+
 ### ✅ Validation Checklist
 
 |  Milestone |  Status |
 |---|---|
 |  `run_pipeline.sh` runs successfully and generates artifacts |  [ ] |  
+|  `docker-compose.yml` created with all three services |  [x] |
 |  MLflow UI accessible at [http://localhost:5555](http://localhost:5555/) |  [ ] |  
 |  FastAPI docs available at [http://localhost:8000/docs](http://localhost:8000/docs) |  [ ] |  
 |  Streamlit UI loads at [http://localhost:8501](http://localhost:8501/) |  [ ] |  
 |  Streamlit connects to FastAPI and returns predictions |  [ ] |
-|  All services run together via `docker-compose up` |  [ ] |  
+|  All services run together via `docker compose up` |  [ ] |  
 ---
 
 ## 🚀 Why This Matters
