@@ -1,0 +1,56 @@
+services:
+  # MLflow Tracking Server
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:latest
+    container_name: mlflow
+    ports:
+      - "5555:5000"
+    command: mlflow server --host 0.0.0.0 --port 5000
+    networks:
+      - ml-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  # FastAPI Inference Server
+  fastapi:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fastapi
+    ports:
+      - "8000:8000"
+    depends_on:
+      mlflow:
+        condition: service_healthy
+    networks:
+      - ml-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  # Streamlit Frontend
+  streamlit:
+    build:
+      context: ./streamlit_app
+      dockerfile: Dockerfile
+    container_name: streamlit
+    ports:
+      - "8501:8501"
+    environment:
+      - API_URL=http://fastapi:8000
+    depends_on:
+      fastapi:
+        condition: service_healthy
+    networks:
+      - ml-network
+
+networks:
+  ml-network:
+    driver: bridge
