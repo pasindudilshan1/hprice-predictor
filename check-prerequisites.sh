@@ -1,4 +1,5 @@
 #!/bin/bash
+set -uo pipefail
 
 # ============================================================================
 # Prerequisites Checker for Docker Compose Setup
@@ -29,6 +30,8 @@ fi
 # Check if model artifacts exist
 echo ""
 echo "🔍 Checking for required model artifacts..."
+
+MODEL_MISSING=false
 
 if [ -f "models/trained/house_price_model.pkl" ]; then
     echo "✅ Model file found: models/trained/house_price_model.pkl"
