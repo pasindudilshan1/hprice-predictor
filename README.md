@@ -135,6 +135,12 @@ Write a `docker-compose.yml` that:
 
 This will create the required model files in `models/trained/` directory.
 
+You can verify all prerequisites are met by running:
+
+```bash
+./check-prerequisites.sh
+```
+
 Once you have the model artifacts, you can start all services with a single command:
 
 ```bash
