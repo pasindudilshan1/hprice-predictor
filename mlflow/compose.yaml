@@ -1,0 +1,6 @@
+services:
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:latest
+    ports:
+      - "5555:5000"
+    command: mlflow server --host 0.0.0.0
