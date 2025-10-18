@@ -1,5 +1,6 @@
 #!/bin/bash
-set -uo pipefail
+set -u
+set -o pipefail
 
 # ============================================================================
 # Prerequisites Checker for Docker Compose Setup
